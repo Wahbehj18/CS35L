@@ -1,0 +1,159 @@
+1. man man
+   man -k printf
+
+2. echo $PATH
+   ls /u
+   cd /cs
+   cd /u/cs
+   ls
+   echo $PATH
+   cd /usr/local
+   ls
+   ls libexec/
+   ls
+   ls lib
+   which mv
+   cd ~
+   ls
+   which mv
+   echo $PATH
+   cd /usr/bin
+   ls
+   which sh
+
+3.
+ 1001  ls
+ 1002  man find
+ 1003  echo $PATH
+ 1004  find /usr/bin -exec
+ 1005  find /usr/bin -executable
+ 1006  find /usr/bin -executable -type f
+ 1007  find /usr/bin -executable -type f -name "*r"
+ 1008  find /usr/bin -executable -type f -name "?r"
+ 1009  find /usr/bin -executable -type f -name "??r"
+ 1010  man ar
+ 1011  man pr
+
+4. 
+ 1013  man emacs
+ 1014  man readlink
+ 1015  readlink emacs
+ 1016  readlink /usr/bin/emacs
+
+5.
+ 1063  gcc -version
+ 1064  gcc -v
+ 1065  /usr/bin/gcc -v
+ 1066  which gcc
+
+6.
+ man chmod
+
+7.
+  999  man find
+ 1000  find /usr/local/bin -maxdepth 1
+ 1001  find /usr/local/bin -maxdepth 1 -mtime 28
+ 1002  find /usr/local/bin -maxdepth 1 -mtime -28
+ 1003  find /usr/local/bin -maxdepth 1 -mtime 1
+ 1004  find /usr/local/bin -maxdepth 1 -mtime -28
+ 1005  find /usr/local/bin -maxdepth 1 -mtime -100
+ 1006  find /usr/local/bin -maxdepth 1 -mtime -1000
+ 1007  find /usr/local/bin -maxdepth 1 -mtime -100000
+ 1008  find /usr/local/cs -maxdepth 1 -mtime -100000
+ 1009  find /usr/local/cs -maxdepth 1 -mtime -28
+ 1016  find /usr/local/cs -maxdepth 1 -type d-mtime -28
+ 1017  find /usr/local/cs -maxdepth 1 -type d -mtime -28
+
+8. 
+ 1019  which find
+ 1020  ls -l /usr/bin
+ 1021  ls -la
+ 1022  ls -la ~ | grep "\->"
+ 1023  ls -la /usr/bin | grep "\->"
+ 1024  ls -la /usr/bin | grep -c "\->"
+
+9.
+ 1050  man ls
+ 1051  cd /usr/lib64
+ 1052  ls
+ 1053  ls -l -t
+ 1054  ls -l -t | tail
+ 1055  ls -l -t -a | tail
+ 1056  ls -t -a | tail
+ 1057  ls -l -t -a | tail
+
+10.
+   man locale
+
+11.
+EXERCISES
+1.1
+1.emacs exer1.html
+2.C-s HTML
+3.RET C-s s c a v e n g e r
+4.RET C-s s e l f - r e f e r e n t i a l
+5.RET C-s a r r o w
+6.RET C-e
+7.C-a
+8.^^
+9.^^
+10.C-x C-c
+
+1.2
+1.emacs exer2.html
+2.M-g g 18, C-k C-k
+3.C-s D e l e t e, C-a, C-k
+4.C-s <!--, C-a, C-k, C-k, C-k
+5.C-s <!, M-z ., C-n, C-a, C-k, C-k, C-k, C-s <!, C-a, C-k
+
+1.3
+1. emacs exer3.html
+2. M-% A s s i g n m e n t 1 A s s i g n m e n t 4 2 SPC SPC
+3. M-% U T F - 8 U S - A S C I I SPC
+4. M-x query-replace-regexp [^[:ascii:]] RET !
+5. C-s </ol> RET RET
+6. C-x s, C-x C-c
+
+
+1.4
+1. cat exer2.html exer2.diff >exer4.html
+2. emacs exer4.html
+3. M-->, C-SPC C-e, M-w, M-g 427, C-y
+4. M-->, C-SPC C-e, M-w, M-g 409, C-y
+   M-->, C-SPC C-e, M-w, M-g 366, C-y
+   M-->, C-SPC C-e, M-w, M-g 127, C-y
+   M-->, C-SPC C-e, M-w, M-g 16, C-y
+5. C-SPC, M-->, Del
+6. C-x u
+7. < ! - -  C-o M-% - - >  < ! - -  SPC SPC SPC SPC - - >
+8. M-% <ol> <oL> SPC SPC SPC SPC SPC SPC SPC 7 occurences
+9. diff -u exer1.html exer4.html >exer4.diff
+
+1.5
+1. emacs, M-x make -directory j u n k
+2. C-x C-f j u n k / h e l l o . c
+3. M-x compile g c c - o h e l l o h e l l o . c
+4. M-!, ./hello, C-x 0, C-x C-w h e l l o - o u t
+5. C-x i ~/year2/key1.txt, C-x C-w ~/key1.txt, 
+
+-*- mode: compilation; default-directory: "~/year2/" -*-
+Compilation started at Thu Oct  3 20:58:10
+
+gcc -o hello hello.c
+
+Compilation finished at Thu Oct  3 20:58:10
+
+
+1.6
+1. emacs, C-x b ret
+2. (random "105-114-897") C-j 52951343944310118
+3. (setq x (random)) C-j  1453642724113915522
+   (setq y (random)) C-j 922939499049794868
+4. (* x y)  885009442510154856, the number is less than either integer
+5. M-: (* x y) I get the same result
+6. the two integers are not truly random because they are based off the random from the student ID
+7. Since the numbers are random and the INT MAX is 2^30 in emacs, you would need at least one small number for overflow to not happen.
+   When dealing with such big numbers, there is going to be a lot more larger numbers than small, so it is almost always going to overflow (>99%)
+
+
+

@@ -1,0 +1,227 @@
+Jacob Wahbeh
+105114897
+CS35L Lab6
+11/12/19
+------------------
+
+1.
+$ mkdir Lab6
+$ cd Lab6
+$ wget http://web.cs.ucla.edu/classes/fall19/cs35L/assign/simpgmp.c
+$ cat simpgmp.c
+
+I downloaded the corresponding file and checked to see it worked
+
+$ gcc -o simpgmp simpgmp.c -lgmp
+
+I used gcc to compile and make an executatble, using the -lgmp flag as
+instructed
+
+
+2.
+$ ./simpgmp 24
+output: 16777216
+
+$ ./simpgmp 16777216
+output: very very large number starting with 1818 and ending with 7536
+
+The program works correctly with the inputs provided
+
+3. 
+$ ldd ./simpgmp
+
+Dynamic libraries the program uses:
+
+linux-vdso.so.1 =>  (0x00007ffe1c5bf000)
+libgmp.so.10 => /lib64/libgmp.so.10 (0x00007f17b28e8000)
+libc.so.6 => /lib64/libc.so.6 (0x00007f17b251a000)
+/lib64/ld-linux-x86-64.so.2 (0x00007f17b2b60000)
+
+
+4. 
+$ strace -c ./simpgmp 16777216
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 97.13    0.035509       17755         2           write
+  2.18    0.000797          53        15           munmap
+  0.24    0.000086           3        25           mmap
+  0.14    0.000051           9         6           mprotect
+  0.12    0.000043           0       100           brk
+  0.08    0.000028           9         3           open
+  0.03    0.000012          12         1         1 access
+  0.03    0.000011           4         3           close
+  0.03    0.000011           3         4           fstat
+  0.02    0.000009           5         2           read
+  0.01    0.000003           3         1           arch_prctl
+  0.00    0.000000           0         1           execve
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.036560                   163         1 total
+
+The program uses 25 mmap and 15 munmaps meaning that it is allocating
+and freeing memory constantly. It also uses 100 brk calls which change
+the locating of the program's data segment. This basically allocates 
+more memory when it increases the program break, and it deallocates 
+memory when it decreases the program break. In regards to dynamic linking, 
+open system call, opens the library and mmap saves it to memory. Then it 
+uses close and munmap when it is finished.
+
+
+5.
+$ ls /usr/bin | awk '(NR-105114897)%251 == 0'
+
+commands:
+atrm
+db_tuner
+gemtopbm
+hugeedit
+krb5-config
+mpstat
+pamrecolor
+pktopbm
+python2.7-config
+slptool
+usb-devices
+
+6. 
+
+$ ldd /usr/bin/atrm
+        linux-vdso.so.1 =>  (0x00007ffd1b7f3000)
+        librt.so.1 => /lib64/librt.so.1 (0x00007feee2045000)
+        libselinux.so.1 => /lib64/libselinux.so.1 (0x00007feee1e1e000)
+        libpam.so.0 => /lib64/libpam.so.0 (0x00007feee1c0f000)
+        libpam_misc.so.0 => /lib64/libpam_misc.so.0 (0x00007feee1a0b000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007feee163d000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007feee1421000)
+        libpcre.so.1 => /lib64/libpcre.so.1 (0x00007feee11bf000)
+        libdl.so.2 => /lib64/libdl.so.2 (0x00007feee0fbb000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007feee245a000)
+        libaudit.so.1 => /lib64/libaudit.so.1 (0x00007feee0d92000)
+        libcap-ng.so.0 => /lib64/libcap-ng.so.0 (0x00007feee0b8c000)
+
+$ ldd /usr/bin/db_tuner
+        linux-vdso.so.1 =>  (0x00007ffeda80b000)
+        libdb-5.3.so => /lib64/libdb-5.3.so (0x00007fc3b50ba000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fc3b4e9e000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007fc3b4ad0000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fc3b5478000)
+
+$ ldd /usr/bin/gemtopbm
+        linux-vdso.so.1 =>  (0x00007fff04ed5000)
+        libnetpbm.so.11 => /lib64/libnetpbm.so.11 (0x00007fd814adf000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007fd8147dd000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007fd81440f000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fd814d1f000)
+
+$ ldd /usr/bin/hugeedit
+        linux-vdso.so.1 =>  (0x00007ffcce9d4000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f52d69fa000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f52d6dc8000)
+
+$ ldd /usr/bin/krb5-config
+        not a dynamic executable
+
+$ ldd /usr/bin/mpstat
+        linux-vdso.so.1 =>  (0x00007ffe2c9d8000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f4b9fa60000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f4b9fe2e000)
+
+$ ldd /usr/bin/pamrecolor
+        linux-vdso.so.1 =>  (0x00007ffe8f37b000)
+        libnetpbm.so.11 => /lib64/libnetpbm.so.11 (0x00007fc4a3038000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007fc4a2d36000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007fc4a2968000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fc4a3278000)
+
+$ ldd /usr/bin/pktopbm
+        linux-vdso.so.1 =>  (0x00007ffe80971000)
+        libnetpbm.so.11 => /lib64/libnetpbm.so.11 (0x00007fe35cf70000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007fe35cc6e000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007fe35c8a0000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fe35d1b0000)
+
+$ ldd /usr/bin/python2.7-config
+        not a dynamic executable
+
+$ ldd /usr/bin/slptool
+        linux-vdso.so.1 =>  (0x00007ffc71703000)
+        libslp.so.1 => /usr/lib64/libslp.so.1 (0x00007fdc8aa84000)
+        libdl.so.2 => /usr/lib64/libdl.so.2 (0x00007fdc8a880000)
+        libz.so.1 => /usr/lib64/libz.so.1 (0x00007fdc8a66a000)
+        libcrypto.so.10 => /usr/lib64/libcrypto.so.10 (0x00007fdc8a207000)
+        libpthread.so.0 => /usr/lib64/libpthread.so.0 (0x00007fdc89feb000)
+        libm.so.6 => /usr/lib64/libm.so.6 (0x00007fdc89ce9000)
+        libnsl.so.1 => /usr/lib64/libnsl.so.1 (0x00007fdc89acf000)
+        libresolv.so.2 => /usr/lib64/libresolv.so.2 (0x00007fdc898b6000)
+        libc.so.6 => /usr/lib64/libc.so.6 (0x00007fdc894e8000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fdc8aea4000)
+
+$ ldd /usr/bin/usb-devices
+        not a dynamic executable
+
+
+/usr/bin/krb5-config
+/usr/bin/usb-devices
+/usr/bin/python2.7-config
+
+These three files had no dynamic libraries. I invoked the file command on
+each of the commands and these 3 were all not executables, which makes sense
+that they do not have dynamic libraries. The remaining files are ELF 64-bit 
+LSB executables or shared objects
+
+krb5-config is a shell script
+python2.7-config is a python script
+usb-devices is another shell script
+
+
+7.
+$ ldd /usr/bin/usb-devices /usr/bin/slptool /usr/bin/python2.7-config 
+   /usr/bin/pktopbm /usr/bin/pamrecolor /usr/bin/mpstat /usr/bin/krb5-config
+   /usr/bin/hugeedit  /usr/bin/gemtopbm /usr/bin/db_tuner  /usr/bin/atrm 
+   | sed 's/([^()]*)//g' 
+   | sort -u
+
+Sorted Dynamic libraries with no duplicates from 9 commands:
+
+	/lib64/ld-linux-x86-64.so.2
+        libaudit.so.1 => /lib64/libaudit.so.1
+        libcap-ng.so.0 => /lib64/libcap-ng.so.0
+        libcrypto.so.10 => /usr/lib64/libcrypto.so.10
+        libc.so.6 => /lib64/libc.so.6
+        libc.so.6 => /usr/lib64/libc.so.6
+        libdb-5.3.so => /lib64/libdb-5.3.so
+        libdl.so.2 => /lib64/libdl.so.2
+        libdl.so.2 => /usr/lib64/libdl.so.2
+        libm.so.6 => /lib64/libm.so.6
+        libm.so.6 => /usr/lib64/libm.so.6
+        libnetpbm.so.11 => /lib64/libnetpbm.so.11
+        libnsl.so.1 => /usr/lib64/libnsl.so.1
+        libpam_misc.so.0 => /lib64/libpam_misc.so.0
+        libpam.so.0 => /lib64/libpam.so.0
+        libpcre.so.1 => /lib64/libpcre.so.1
+        libpthread.so.0 => /lib64/libpthread.so.0
+        libpthread.so.0 => /usr/lib64/libpthread.so.0
+        libresolv.so.2 => /usr/lib64/libresolv.so.2
+        librt.so.1 => /lib64/librt.so.1
+        libselinux.so.1 => /lib64/libselinux.so.1
+        libslp.so.1 => /usr/lib64/libslp.so.1
+        libz.so.1 => /usr/lib64/libz.so.1
+        linux-vdso.so.1 =>
+
+Many of the dynamic libraries were shared, but they differed in text
+because of where they were stored in memory. I used sed to get rid
+of the parathetical expressions of their memory addresses and then used 
+sort -u to get rid of the duplicates.
+
+
+
+
+
+
+
+
+
+
+
+
+

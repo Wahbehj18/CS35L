@@ -1,0 +1,123 @@
+Jacob Wahbeh
+105114897
+11/25/19
+---------------
+
+I plugged my beagle bone in and it wasnt recognized by my computer.
+I went to office hours to try and do the flash software update, but that
+did not work. I ended up borrowing someone else's beagle bone
+
+
+Set up
+-----
+
+plugged it in and clicked on START.htm and went to the webpage and
+downloaded BONE_D64. I tried to install the drivers but it didnt work. I
+had to restart my computer and disable driver signatures on my laptop.
+Once that started working I installed the drivers and was able to use putty
+with 192.168.7.2 and username root.
+
+# connmanctl
+# enable wifi
+# scan wifi
+# services
+# agent on
+# connect wifi_2cf7f106a1ed_426561676c65426f6e65303130373739_manageone
+# quit 
+
+I opened up connmanctl and scanned for wifi. Then, I connected to my 
+partner's beagle bone's wifi and he connected to his iPhone hotspot.
+
+My partner was Valentin Lagunes
+
+He did # ifconfig so I can use his ip address : 170.20.10.3
+
+
+
+Server
+-------
+
+Create a public/private key pair
+
+# ssh-keygen
+
+root@beaglebone:~# ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+/root/.ssh/id_rsa already exists.
+Overwrite (y/n)? y
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+c2:54:9b:65:40:58:97:7e:c0:2d:3a:ea:1b:65:e3:a8 root@beaglebone
+The key's randomart image is:
++---[RSA 2048]----+
+|       +=o+o     |
+|      .. *= .    |
+|      . oo o     |
+|     o  o . .    |
+|      o.S. .     |
+|      .* .       |
+|     .o .        |
+|     ...         |
+|    E ..         |
++-----------------+
+
+Then I created an account for Valentin on my beagle bone
+and gave him a passwd
+
+# sudo useradd -d /home/val -m val
+# sudo passwd val
+	Password: lagunes
+
+Created a .ssh directory in the directory for my partner
+and gave him all the permissions and ownership
+
+# sudo mkdir /home/val/.ssh
+# cd /home/val
+# sudo chown -R val .ssh
+# sudo chmod 700 .ssh
+
+Now the server was set up, so I logged on to his beagle bone and vice versa
+
+
+
+
+Client
+---------
+
+generate key pair again
+
+# ssh-keygen
+
+copy key to my partner's ip and added ssh agent so I can log in
+
+# ssh-copy-id -d jacob@170.20.10.3
+# eval $(ssh-agent)
+# ssh-add
+
+ssh in to his beagle bone
+
+# ssh jacob@170.20.10.3
+
+Create a file and input random sentence so he can view it on his device
+
+nano ayyy.txt
+
+Once finished I checked his beagle bone directory and the file was 
+successfully saved!!
+
+
+
+Next I tried running programs with x11 forwarding
+
+# ssh -X jacob@170.20.10.3
+# firefox
+
+however, it said the x11 forwarding was off which I could not figure 
+how to fix.
+
+
+

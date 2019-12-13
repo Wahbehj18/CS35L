@@ -1,0 +1,15 @@
+#!/bin/bash
+
+grep "<td>.*</td>" |               # select only words and english translations
+sed "s/<[^<]*>//g" |               # delete html syntax
+tr -d [:blank:] |                  # delete blank spaces
+sed "/^\s*$/d" |                   # delete blank lines
+sed "/Kahakai/i\ooo" |             # insert random word above Kahakai because its translation was deleted
+sed -n '0~2!p' |                   # delete every other line (english translations)
+tr [:upper:] [:lower:] |           # all upper case to lower case
+sed "s/\`/\'/g" |                  # change grave to '
+sed "s/[^pk'mnwlhaeiou]//g" |      # delete non hawaiian characters
+sed "/^\s*$/d" |                   # delete any remaining blank lines
+sort -u                            # sort 
+
+

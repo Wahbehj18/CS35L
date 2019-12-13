@@ -1,0 +1,21 @@
+2019-10-27  Jacob E Wahbeh  <wahbeh@lnxsrv06.seas.ucla.edu>
+
+        * timefix.h (timespec_cmp):
+        Fixed an issue where very old files were showing up as more recent
+        than new files
+        (timespec_cmp):
+
+        Changed the substraction in timespec_cmp to comparison operators
+
+
+--- lib/timespec.h	2019-10-27 20:25:31.414525000 -0700
++++ timefix.h	2019-10-27 20:27:16.313088000 -0700
+@@ -50,7 +50,7 @@
+   else if(a.tv_sec < b.tv_sec)
+     return -1;
+   else // diff = 0, return nano secs
+-    return a.tv_nsec - b.tv_nsec    
++    return a.tv_nsec - b.tv_nsec;
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP

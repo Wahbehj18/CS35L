@@ -1,0 +1,157 @@
+Jacob Wahbeh
+105114897
+CS35L HW9
+11/18/19
+-----------
+
+
+1.
+$ emacs hw9.txt
+keep log
+
+2. 
+$ git checkout -b quote v3.0
+
+checkout directory with tag v3.0 and make a new branch called quote
+
+
+3. 
+$ patch -p1 < quote-3.0-patch.txt
+
+Applied patch to new branch. Ran with no errors
+
+
+4.
+Learn the change log command
+
+The Emacs command C-x 4 a adds a new entry to the change log file for the 
+file you are editing (add-change-log-entry-other-window). 
+If that file is actually a backup file, it makes an entry appropriate 
+for the file's parent—that is useful for making log entries for 
+functions that have been deleted in the current version.
+
+
+5. 
+Add appropriate change log
+
+$ emacs quote-3.0-patch.txt
+C-x 4 a
+
+2019-11-18  Jacob E Wahbeh  <wahbeh@lnxsrv06.seas.ucla.edu>
+
+        * quote-3.0-patch.txt: We created this patch in regards to the GNU
+        changes which stated that quotes should be look 'like this' instead
+        of `like this'. However we made the changes only to character string
+        constants in .c files and not in comments or other places
+C-x C-c
+
+This change log accurately shows what happened in our patch.
+
+
+6.
+$ git add .
+$ git commit -F ChangeLog
+
+Adds the files to the index and then commit changes
+-F argument adds a file (ChangeLog) to the commit message
+
+[quote 52089a0] 2019-11-18  Jacob E Wahbeh  <wahbeh@lnxsrv06.seas.ucla.edu>
+ Committer: Jacob E Wahbeh <wahbeh@lnxsrv06.seas.ucla.edu>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 14 files changed, 7029 insertions(+)
+ create mode 100644 quote-3.0-patch.txt
+ create mode 100644 quote-3.0-test.txt
+ create mode 100644 src/cmp.c.orig
+ create mode 100644 src/cmp.c.rej
+ create mode 100644 src/diff.c.orig
+ create mode 100644 src/diff.c.rej
+ create mode 100644 src/diff3.c.orig
+ create mode 100644 src/diff3.c.rej
+ create mode 100644 src/dir.c.orig
+ create mode 100644 src/dir.c.rej
+ create mode 100644 src/sdiff.c.orig
+ create mode 100644 src/sdiff.c.rej
+ create mode 100644 src/util.c.orig
+ create mode 100644 src/util.c.rej
+
+
+7.
+Similar to the Lab step we will use git format-patch to create a new
+patch file and save the stdout into the file.
+
+$ git format-patch -1 --stdout > formatted-patch.txt
+
+
+8.
+My TA said to use myself as the 'partner'
+
+$ git checkout -b partner v3.0
+create new branch called partner and checkout version 3.0
+
+$ git am < formatted-patch.txt
+apply the series of patched from mailbox
+
+Applying: 2019-11-18 Jacob E Wahbeh <wahbeh@lnxsrv06.seas.ucla.edu>
+.git/rebase-apply/patch:50: trailing whitespace.
+
+.git/rebase-apply/patch:53: space before tab in indent.
+         || (e == LONGINT_INVALID_SUFFIX_CHAR && **argptr == delimiter))
+.git/rebase-apply/patch:61: space before tab in indent.
+          _("SKIP values may be followed by the following multiplicative suffixes:\n\
+.git/rebase-apply/patch:66: space before tab in indent.
+          _("Exit status is 0 if inputs are the same, 1 if different, 2 if trouble."));
+.git/rebase-apply/patch:70: space before tab in indent.
+        {
+warning: squelched 232 whitespace errors
+warning: 237 lines add whitespace errors.
+
+./bootstrap
+./configure
+./make
+./make check
+
+./stdio.h:434:1: error: 'gets' undeclared here (not in a function); did you mean 'fgets'?
+  434 | _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+      | ^~~~~~~~~~~~~~~
+
+One error in the make
+
+
+
+9.
+Verify ChangeLog
+
+$ make distdir
+
+new directory diffutils-3.0.1-44b1 was created
+
+$ cd diffutils-3.0.1-44b1
+$ emacs ChangeLog
+
+The ChangeLog is the same one that I wrote so it worked!
+
+10.
+
+$ exit
+
+Launched Putty with X11 enabled
+
+$ cd ~eggert/src/gnu/emacs
+$ gitk
+
+A new window popped up with a GUI for gitk
+I scrolled down and found a commit on 2015-01-25 22:04:55
+Message: (shr-make-table-1) Make colspan display more sensibly.
+Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
+

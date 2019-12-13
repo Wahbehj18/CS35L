@@ -1,0 +1,73 @@
+Jacob Wahbeh
+105114897
+Lab3
+
+
+mkdir Assign3
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+
+Downloaded the Coreutils from the assignment page and put it in a a dir
+called 'Assign3'
+Downloaded the GNU keyring to check the signature
+
+There was an error about the trusted signature and not belonging to owner
+but it
+seems to have downloaded fine
+
+
+tar -xJvf coreutils-8.29.tar.xz
+mkdir ~/COInstall
+
+unzip the tar file into the folder Assign3/coreutils-8.29
+Created a dir to house the install files
+
+cd coreutils-8.29
+./configure --prefix=/u/cs/ugrad/wahbeh/COInstall
+
+set the make and install files to the directory I made
+
+make
+make install
+
+compile the make file and install it to the corresponding directory
+compiled successfully, no errors
+
+COInstall/bin/ls -a -A
+
+output: .  ..  bin  libexec  share
+
+reproduced the bug, still shows that -a overrides the -A and displays .
+and ..
+
+
+cd coreutils-8.29
+emacs patchFile, paste the patch notes from the Assignment page
+patch -p1 < patchFile
+
+put the patch file into the directory. -p1 is used because it is the first
+patch
+There was a Hunk error displayed but I do not believe anything actually
+failed becausethe following steps were successful
+
+
+make
+autoreconf --force --install
+
+It did not work because of the automake warning, so I updated the
+configurations
+
+
+make install
+./bin/ls -a -A
+
+output: bin  libexec  share
+
+
+install the new patch and check to make sure the output is the correct one
+now
+The Patch Worked!
+
+

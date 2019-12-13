@@ -1,0 +1,26 @@
+Jacob Wahbeh
+105114897
+11/25/2019
+-----------
+
+
+
+1. Even if the other teams had been observing all the bytes going across the
+network in the lab exercise, the network would still be secure because of 
+ssh (secure shell). It provides a secure channel over a unsecured netowrked 
+by using encrypting and authentication. 
+
+(1) If the other team tapped into my keyboard and copied my keystrokes, they 
+still would not be able to hack in because we used password-free 
+authentication due to the private keys we generated.
+
+(2) If we booted off USB and the other team managed to gain access to USB, 
+the network might not be secure since they would have access to the .ssh
+directory we created and all the private keys we created.
+
+
+
+2. The gp2 --verify command doesnt actually verifify the creator of the file
+because it only checks that the file matches the corresponding signature. To
+fix this problem, we could use a third party like Certificate Authority to 
+keep track of all the files people create and the signatures generated. 

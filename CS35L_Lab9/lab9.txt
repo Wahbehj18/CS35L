@@ -1,0 +1,164 @@
+Jacob Wahbeh
+105114897
+11/27/19
+CS 35L Lab 9
+--------------
+
+1. 
+Find disk space for working files in directory
+$ cd ~eggert/src/gnu/emacs-CS-35L
+$ du -sh .
+
+du is disk usage, -s is summarize total, ad -h is human readable.
+Output: 509M
+
+the directory has 509MB of disk space
+
+Disk space for git repository
+
+$ git count-objects -vH
+
+count: 0
+size: 0 bytes
+in-pack: 871160
+packs: 1
+size-pack: 333.34 MiB
+prune-packable: 0
+garbage: 0
+size-garbage: 0 bytes
+
+Total size is 333.34MB for the git repo
+
+Git blobs take up the most space because they are binary large objects that
+are used to store the contents of each file in a repository. 
+
+
+2. 
+Number of Local and Remote branches
+
+$ git branch | wc -l
+
+176 local branches
+
+$ git branch -r | wc -l
+
+177 remote branches
+
+
+3. 
+Remote repositories
+
+$ git remote -v
+origin  https://git.savannah.gnu.org/git/emacs.git (fetch)
+
+There is one remote repository (origin) and it is stored at the 
+above URL.
+
+
+4. 
+Most recent local branches
+
+$ git branch --sort=-committerdate | head -10
+
+* master
+  scratch/joaot/make-completion-at-point-function
+  feature/windows-with-utils
+  scratch/completion-api
+  scratch/a-modest-completion-redesign-proposal
+  scratch/fido-mode
+  feature/gnus-select2
+  feature/extend_face_id
+  scratch/jit-lock-antiblink-cleaned-up
+  emacs-26
+
+
+
+5. 
+Count how many commits on master branch
+
+$ git rev-list --count master
+
+139583 Commits
+
+
+
+6. 
+Percentage of all commits that are also in master branch
+
+$ git rev-list --count -all
+143910 total commits
+
+139583/143910 = 97.0%
+
+
+
+7. 
+Most commits by author since 2013, top 10
+-ns is organize by number and summarize
+
+$ git shortlog -ns --since=2013 | head -10
+  3230  Eli Zaretskii
+  3175  Paul Eggert
+  2602  Glenn Morris
+  1806  Lars Ingebrigtsen
+  1389  Michael Albinus
+  1367  Stefan Monnier
+   576  Noam Postavsky
+   517  Dmitry Gutov
+   438  Alan Mackenzie
+   413  Juri Linkov
+
+
+8. 
+Gitk Graph
+
+
+	989ac______
+	  |        |
+	  .        |	
+	  .	   .
+	  .	   .
+	  |	   .
+	abcb2 	   |
+	  |	   | 
+	  _________|
+	  |        |
+	  |       49cd5
+	  |        |
+   	  |        .
+	  |        .
+	  |        .
+	  | 	   |
+	  | 	   /	 
+	  |     00e4e
+	  |      /
+	  |    82073
+	  |     |
+	  .	.
+	  .	.
+	  .	.
+	  |     |
+	0c06b----
+	  |     \
+	  |	 \
+	  |     5490c
+	  .	  .
+	  .	  .
+	  .	  .
+	  |	625ce
+	977cd 	  |
+	   \	  |
+	    \	  |
+	     \	  |
+	      \	  |
+	      4ea37				
+		
+
+	
+Starting at 4ea37, it branched into two paths, one for 977cd and 625ce.
+625ce continued to 5490c and then merged back with 977cd at 0c06b. However,
+that second branch kept going in 82073. It created another sub branch at 00e4
+and that continued until 49cd5. This branch merged with the first at abcb2. 
+49cd5 continued its branch until finally merging at 989ac. abcb2 also continued
+and to 989ac. 
+

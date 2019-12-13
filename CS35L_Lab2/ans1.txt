@@ -1,0 +1,114 @@
+Jacob Wahbeh
+105114897
+10/4/19
+
+1. man -k word
+
+2. /usr/local/cs/bin/mv
+   /usr/bin/sh  
+   I used which and echo $PATH
+
+
+3. tr - translate or delete characters
+   pr - convert text files for printing
+   ar - create, modify, and extract from archives
+   
+   find /usr/local/cs/bin /usr/bin -executable -name ?r
+   man ar, man pr, man tr
+
+4. /etc/alternatives/emacs
+   used readlink /usr/bin/emacs
+
+5. /usr/bin/gcc version = gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC)
+   plain gcc version = gcc version 9.2.0 (GCC)
+   
+   theyre different because the plain gcc is using a different path. 
+   It is a completely different executable file entirely
+
+6. u+sx,o-w
+   this means that owner gets set and is added the permission to execute
+   and other users are removed from writing
+
+7. 
+/usr/local/cs
+/usr/local/cs/bin
+/usr/local/cs/bison-3.4.2
+/usr/local/cs/.del
+/usr/local/cs/gdb-8.3.1
+/usr/local/cs/ocaml-4.09.0
+
+
+I used man find,  find /usr/local/cs -maxdepth 1 -mtime -28
+
+8. 280
+   which find, ls -la /usr/local/cs | grep -c "\->"
+
+9. Dec 28  2013 librom1394.so.0.3.0
+   man ls, ls -l -t -a | tail
+
+10. locale gets its data from environmental variables
+    I read man locale
+
+11.
+downcase-dwim                 M-x ... RET
+   Downcase words in the region, if active; if not, downcase word at
+   point.
+downcase-region               C-x C-l
+   Convert the region to lower case.  In programs, wants two
+   arguments.
+downcase-word                 M-l
+   Convert to lower case from point to end of word, moving over.
+
+emacs, C-h a downcase
+
+12.
+reverse regular expression search C-M-r
+regular expression search C-M-s
+transpose sexps C-M-t
+Move up in parenthesis structure C-M-u
+scroll other window C-M-v
+
+emacs, C-h-c to look up commands
+
+13.
+It is bound to C-g.
+
+(keyboard-quit)
+
+Signal a 'quit' condition.
+During execution of Lisp code, this character causes a quit directly.
+At top-level, as an editor command, this simply beeps.
+
+emacs, C-h c to look up keystrokes, C-h f keyboard-quit
+
+14.
+It is bound to C-y, <S-insertchar>, <S-insert>, <menu-bar> <edit>
+<paste>.
+
+(yank &optional ARG)
+
+Reinsert ("paste") the last stretch of killed text.
+More precisely, reinsert the most recent kill, which is the
+stretch of killed text most recently killed OR yanked.  Put point
+at the end, and set mark at the beginning without activating it.
+With just C-u as argument, put point at beginning, and mark at end.
+With argument N, reinsert the Nth most recent kill.
+
+I used C-h f yank
+
+15. They seem to be almost the same. emacs dired gives information about the 
+current "." and parent ".." directories
+
+I used C-h f dired to learn about the command and C-x d to execute
+
+cd /usr/bin ls -l
+
+
+
+
+
+  
+
+
+
+

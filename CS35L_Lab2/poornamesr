@@ -1,0 +1,96 @@
+#!/bin/bash
+
+function poor () {
+    
+    declare -a arr
+    declare -a dupes
+    let count=0
+    let dupeCount=0
+
+    if [ "$1" == "-r" ]
+    then
+	local dir=$2
+    else
+	local dir=$1
+    fi
+    
+    if [ ! -d $dir ];
+    then
+	echo "Not a Directory" 1>&2
+	exit 1
+    fi
+    
+    if [ $# -ge 2 ] && [ "$1" != "-r" ];
+    then
+	echo "Too many arguments" 1>&2
+	exit 1
+    fi
+    
+    if [ $# -eq 0 ]
+    then
+	dir='.'
+    fi
+
+    if [ $# -eq 1 ] && [ "$1" == "-r" ]
+    then
+	dir='.'
+    fi
+	
+    [[ $dir = -* ]] && echo "Directory cannot begin with '-'" && exit 1
+
+    List2=`ls -a $dir | tr [:upper:] [:lower:]`
+    List3=`ls -a $dir`
+    List=`ls -a $dir | 
+    	 grep -E "[^-[:alpha:]._]"\|"^\.[^.]+"\|"^\.\..+"\|"^-"\|".{15,100}"`
+
+
+    for file in $List
+    do
+	if [ -d "$dir/$file" ];
+	then
+	    echo "$dir/$file/"
+	else
+	    echo "$dir/$file"
+	fi
+    done
+
+    
+    for file1 in $List2
+    do
+	arr[$count]="$file1"
+	let count=count+1
+    done    
+
+
+    for (( i=0; i<$count; i++ ))
+    do
+	for (( j=i+1; j<$count; j++ ))
+       	do
+       	    if [ ${arr[$i]} == ${arr[$j]} ]
+	    then
+	       	dupes[$dupeCount]="$dir/${arr[$i]}"
+	       	let dupeCount=dupeCount+1
+	    fi
+	done
+    done
+    
+    if [ $dupeCount -gt 0 ]
+    then
+	echo ${dupes[@]} | tr ' ' '\n' | sort -u
+    fi
+
+    if [ "$1" == "-r" ]
+    then
+	for file3 in $List3
+	do
+	    if [ -d "$dir/$file3" ] && [ "$file3" != "." ] && [ "$file3" != ".." ] 
+	    then
+		poor -r "$dir/$file3"
+	    fi
+	done
+    fi	
+
+    return
+}
+
+poor $1 $2

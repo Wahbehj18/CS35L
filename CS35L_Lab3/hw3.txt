@@ -1,0 +1,49 @@
+Jacob Wahbeh
+105114897
+Assignment 3
+
+
+
+1. Does the patch improve performance
+
+         case 'A':
+-          if (ignore_mode == IGNORE_DEFAULT)
+-            ignore_mode = IGNORE_DOT_AND_DOTDOT;
++          ignore_mode = IGNORE_DOT_AND_DOTDOT;
+           break;
+
+From the patch notes, we are getting rid of an if statement, and that is one
+less check the computer has to do. So it is slightly faster.
+
+2. What else to watch out for? Might introduce other problems?
+
+./bin/ls -A -a   -output: .  ..  bin  libexec  share
+./bin/ls -a -A   -output: bin libexec share
+
+We need to watch out for the order because they output different things.
+
+
+3. Running randline.py on /dev/null
+
+We get this error: IndexError: list index out of range
+The program is trying to choose a line that is not there. 
+Similar to picking out an item in an empty error.
+
+
+4. Running randline.py on /dev/null in Python 3
+
+We get this error: SyntaxError: invalid syntax
+It is a compilation error instead of runtime because Python 3 requires
+different syntax than Python 2
+
+The line: "except IOError as (errno, strerror):" is incorrect in Python 3.
+It should be written as "except IOError as err:
+				errno, strerror = err.args"
+
+
+5. My shuf.py works with both Python 2 and Python 3. I believe this is
+because
+I did not use any syntax that was strictly for Python 3 such as the
+specific exceptions.
+
+

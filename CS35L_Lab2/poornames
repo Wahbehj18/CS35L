@@ -1,0 +1,49 @@
+#!/bin/bash
+declare -a arr
+let count=0
+dir=$1
+
+if [ ! -d $dir ];
+then
+    echo "Not a Directory" 1>&2
+    exit 1
+fi
+
+if [ $# -ge 2 ];
+then
+    echo "Too many arguments" 1>&2
+    exit 1
+fi
+
+
+List2=`ls -a $dir | tr [:upper:] [:lower:]`
+
+List=`ls -a $dir | grep -E "[^-[:alpha:]._]"\|"^\.[^.]+"\|"^\.\..+"\|"^-"\|".{15,100}"`
+
+
+for file in $List
+do
+    echo "$dir/$file"
+done
+
+for file1 in $List2
+do
+    if [ -f $file1 ]
+    then
+	arr[$count]="$file1"
+	let count=count+1
+    fi
+done
+
+
+for (( i=0; i<$count; i++ ))
+do
+    for (( j=i+1; j<$count; j++ ))
+    do
+	if [ ${arr[$i]} == ${arr[$j]} ]
+	then
+	    echo "${arr[$i]} and ${arr[$j]} are the same"
+	fi
+    done
+done
+

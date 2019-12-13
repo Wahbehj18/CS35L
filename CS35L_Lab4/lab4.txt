@@ -1,0 +1,175 @@
+Jacob Wahbeh
+105114897
+lab4
+10/28/19
+
+
+
+1. 
+wget http://web.cs.ucla.edu/classes/fall19/cs35L/assign/coreutils-with-bug.tar.gz
+tar -xvzf coreutils-with-bug.tar.gz
+
+Download the tar file and unzip
+
+
+2.
+mkdir coreBug
+cd coreBug
+pwd
+cd ../coreutils-with-bug
+./configure --prefix=/u/cs/ugrad/wahbeh/year2/Lab4/coreBug
+
+made a directory to install the coreutils with bug
+grabbed the path and used the configure file to set the prefix
+
+"checking whether mkdir fails due to a trailing slash... no
+checking for working mktime..."
+The configuration got stuck on these two lines for a while but ended up finishing
+
+
+3.
+make 
+make install
+
+"utimens.h:2:5: error: conflicting types for 'futimens'
+    2 | int futimens (int, char const *, struct timespec const [2]);
+      |     ^~~~~~~~
+In file included from utimecmp.h:25,
+                 from utimecmp.c:25:
+/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+  373 | extern int futimens (int __fd, const struct timespec __times[2]) __THROW;"
+      |            ^~~~~~~~
+
+After running make & make install, these errors showed up. They seem like a naming
+error, two functions having the same name.
+
+
+4. 
+wget http://web.cs.ucla.edu/classes/fall19/cs35L/assign/coreutils.diff
+patch -p0 < coreutils.diff
+
+download and apply patch
+The patch works because it renames one of the functions that has the same name
+
+
+5. 
+make 
+make install
+ls ../coreBug
+
+Installed correctly, and checked to see contents of new dir
+:bin  share
+
+6.
+
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice-cs35L
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/year2/Lab4/coreBug/bin/ls -lt --full-time wwi-armistice-cs35L now now1
+
+recreated the bug, year 1918 shows up in front of 2018
+
+
+
+7. 
+gdb ~/year2/Lab4/coreBug/bin/ls
+run -lt --full-time /tmp/tmp.ZpDe9OLVsS
+
+run the program in the debugger using the $tmp
+
+8.
+break main
+n
+n
+...
+
+start with main, see what functions are called.
+Looks for mostly basic checks but main function that was called is "sort_files()"
+debugged again and the function just calls qsort, but since qsort is provided by c,
+we can assume it is true.
+Therefore, the arguments passed in it might be incorrect
+qsort (files, files_index, sizeof *files, func);
+
+9.
+break qsort
+info locals
+func = 0x407010 <compare_mtime>
+
+The function responsible for sorting is compare_mtime
+This function calls cmp_mtime() which calls timespec_cmp
+
+10.
+list timespec_cmp
+:
+timespec_cmp (struct timespec a, struct timespec b)
+47      {
+48        int diff = a.tv_sec - b.tv_sec;
+49        return diff ? diff : a.tv_nsec - b.tv_nsec;
+50      }
+
+The function compares the total seconds of each of the timestamps by doing a substraction.
+There might be issues when substracting files over 100 years apart because of overflow issues
+
+11.
+found the timespec_cmp function location by doing "ls | grep timespec"
+in various dirs, located in coreutils-with-bug/lib
+cp lib/timespec.h timefix.h
+emacs timefix.h
+
+timespec_cmp (struct timespec a, struct timespec b)
+{
+  if(a.tv_sec > b.tv_sec)
+    return 1;
+  else if(a.tv_sec < b.tv_sec)
+    return -1;
+  else // diff = 0, return nano secs
+    return a.tv_nsec - b.tv_nsec;
+}
+
+I changed the subtractions to straight > or < comparisons.
+If the seconds are equal, compare the nano seconds
+
+12.
+diff -u lib/timespec.h timefix.h > lab4.diff
+emacs lab4.diff C-x 4-a
+
+created the diff file and added a change log entry for the patch
+
+patch -p1 < lab4.diff
+Prompted me with "file to be patched:" lib/timespec.h
+
+successfully patched file
+
+make
+make install
+No errors occurred during this process
+
+13.
+redid the steps for the $tmp, output:
+
+-rw-r--r-- 1 wahbeh csugrad 0 2019-10-28 03:30:18.442276379 +0000 now1
+-rw-r--r-- 1 wahbeh csugrad 0 2019-10-28 03:30:12.820083160 +0000 now
+-rw-r--r-- 1 wahbeh csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice-cs35L
+
+Files are in correct order so it looked like it worked.
+
+14.
+mkdir temp
+cd temp
+...
+TZ=UTC0 ls -lt --full-time wwi-armistice-cs35L now now1
+output:
+-rw-r--r-- 1 wahbeh csugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice-cs35L
+-rw-r--r-- 1 wahbeh csugrad 0 2019-10-28 03:55:24.177348000 +0000 now1
+-rw-r--r-- 1 wahbeh csugrad 0 2019-10-28 03:55:16.709662000 +0000 now
+
+The ordering looks correct but the file with timestamp 1918 was changed to 2054.
+
+
+
+
+
+

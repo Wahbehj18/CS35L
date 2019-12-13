@@ -1,0 +1,268 @@
+Jacob Wahbeh
+105114897
+CS 35L Lab7
+11/18/19
+------------
+
+1.
+$ git clone https://git.savannah.gnu.org/git/diffutils.git
+
+went on the savannah page and used their git clone to put in my own directory
+
+
+2.
+$ git log > git-log.txt
+
+ran the git log command, which has the whole change log of the repo, then
+I saved it into a text file git-log.txt
+
+
+3.
+$ git tag > git-tags.txt
+
+ran the git tag, which has all the version numbers, then saved it to a file
+called git-tags.txt
+
+
+4.
+$ emacs git-log.txt
+C-s "maint: quote"
+
+The commit is on line 1887 of git-log.txt
+
+commit 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f
+
+$ git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f --stdout 
+> quote-patch.txt
+
+I used git format-path to create a patch, -1 specifies only 1 commit and 
+--stdout states the output, which is put into a text file
+
+5.
+$ git checkout -b vers3 v3.0
+
+I created a new branch called vers3 starting at tag v3.0
+
+
+6.
+$ patch -p1 < quote-patch.txt
+
+I continued to press RETURN whenever it prompted me with "file to patch"
+
+I had a few hunk fails and mostly hunks ignored
+
+7.
+$ git status
+
+Displayed the changes made to the current branch
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        deleted:    NEWS
+        deleted:    README
+        deleted:    README-hacking
+        deleted:    TODO
+        deleted:    cfg.mk
+        deleted:    doc/diagmeet.note
+        modified:   ms/config.bat
+        modified:   ms/config.site
+        modified:   po/en.po
+        modified:   src/analyze.c
+        modified:   src/cmp.c
+        modified:   src/context.c
+        modified:   src/diff.c
+        modified:   src/diff.h
+        modified:   src/diff3.c
+        modified:   src/dir.c
+        modified:   src/ifdef.c
+        modified:   src/io.c
+        modified:   src/sdiff.c
+        modified:   src/side.c
+        modified:   src/system.h
+        modified:   src/util.c
+        modified:   tests/help-version
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        NEWS.orig
+        NEWS.rej
+        README-hacking.orig
+        README-hacking.rej
+        README.orig
+        README.rej
+        TODO.rej
+        cfg.mk.orig
+        cfg.mk.rej
+        doc/diagmeet.note.rej
+        git-log.txt
+        git-tags.txt
+        ms/config.bat.rej
+        ms/config.site.orig
+        ms/config.site.rej
+        po/en.po.rej
+        quote-patch.txt
+        src/analyze.c.rej
+        src/cmp.c.orig
+        src/cmp.c.rej
+        src/context.c.orig
+        src/context.c.rej
+        src/diff.c.orig
+        src/diff.c.rej
+        src/diff.h.orig
+        src/diff.h.rej
+        src/diff3.c.orig
+        src/diff3.c.rej
+        src/dir.c.orig
+        src/dir.c.rej
+        src/ifdef.c.rej
+        src/io.c.rej
+        src/sdiff.c.orig
+        src/sdiff.c.rej
+        src/side.c.rej
+        src/system.h.orig
+        src/system.h.rej
+        src/util.c.orig
+        src/util.c.rej
+        tests/help-version.orig
+        tests/help-version.rej
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+8.
+vc-diff - Compare the work files in the current VC fileset with 
+	the versions you started from (vc-diff)
+
+vc-recert - Revert the work file(s) in the current VC fileset 
+	to the last revision 
+
+With these commands, you can undo all the changes in the files and compare
+the differences to see the exact changes you want to undo
+
+
+9.
+
+To revert all the non .c files I did the following:
+$ emacs <file>
+C-x v u (vc-revert), then types "yes" when prompted
+C-x, C-c (exit)
+
+
+For all the .c files I did the following:
+$ emacs <file>
+C-x v = (vc-diff)
+Then I manually went through all the changes and undoed the ones with changes
+not involving character string constants
+C-c C-a (apply/undo hunk)
+C-x C-c (exit)
+
+Most of the changes I undoed were comments, the ones I left were string literals
+
+
+10.
+$ ls src | grep ".c.rej"
+
+analyze.c.rej
+cmp.c.rej
+context.c.rej
+diff3.c.rej
+diff.c.rej
+dir.c.rej
+ifdef.c.rej
+io.c.rej
+sdiff.c.rej
+side.c.rej
+util.c.rej
+
+I went through all the files and their corresponding .c files using emacs
+
+The only files that had extra changes to make were diff.c and diff3.c
+I found the changes by using C-s in emacs and finding the correct strings
+
+
+11.
+$ git clean -f
+
+To remove all untracked files I used git clean. The -f is required because it will
+not actually work unless given the force argument
+
+
+12.
+$ git status
+
+Now it displays a much smaller set (half a dozen)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/cmp.c
+        modified:   src/diff.c
+        modified:   src/diff3.c
+        modified:   src/dir.c
+        modified:   src/sdiff.c
+        modified:   src/util.c
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git diff > quote-3.0-patch.txt
+
+saved the get diff file into a text file
+
+13.
+
+Reading through README-hacking I ran the following:
+
+$ ./bootstrap
+$ ./configure
+$ make
+$ make check
+
+This appropriately made the command, to check I did:
+
+$ diff . - 
+diff: cannot compare '-' to a directory
+
+$ diff --help
+
+many lines but I made sure 
+FILES are 'FILE1 FILE2' or 'DIR1 DIR2' or 'DIR FILE...' or 'FILE... DIR'.
+
+which is a line I remember changing so it worked!
+
+14.
+Sanity check
+
+$ mkdir diffutils-3.0
+$ mkdir diffutils-3.0-patch
+
+create 2 directories to place the src code in later
+
+$ git clone https://git.savannah.gnu.org/git/diffutils.git diffutilsCOPY
+$ git checkout v3.0
+$ cp -r diffutilsCOPY/src/*.c diffutils-3.0
+$ cp -r diffutils/src/*.c diffutils-3.0-patch
+
+made another diffutils directory and set it to v3.0 then copied src code 
+
+$ diff -pru ../diffutils-3.0 ../diffutils-3.0-patch > quote-3.0-test.txt
+
+Ran the code provided in the assignment and saved it to quote-3.0-test.txt
+
+
+15.
+
+$ diff quote-3.0-patch.txt quote-3.0-test.txt
+
+Compares the patch to the test. Looking through I can see that the files
+have correctly replaced the ' and `.
+
+
+
+
+
+
+

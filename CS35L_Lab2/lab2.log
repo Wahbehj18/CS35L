@@ -1,0 +1,90 @@
+
+Jacob Wahbeh
+105114897
+
+CS35L Assignment 2
+10/14/2019
+
+1. export LC_ALL = 'C' 
+   locale 
+   all LC_* are equal to 'C' now
+
+
+2. sort /usr/share/dict/words > words
+   cat words
+   make sure the words are in the file in alphabetical order
+
+3. curl http://web.cs.ucla.edu/classes/fall19/cs35L/assign/assign2.html > assign2.html
+   download the webpage and put in file called assign2.html
+
+4a. tr -c 'A-Za-z' '[\n*]' < assign2.html
+    uses the webpage as input and replaces everything except for letters as a new line character
+
+4b. tr -cs 'A-Za-z' '[\n*]' < assign2.html
+    does the same as previous but if there is more than one newline in a row, it deletes all except 1
+    this allows for the words to be separated into a list
+
+4c. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort
+    takes the previous list of words and puts them in alphabetical order
+
+4d. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u
+    takes the alphabetized list and deletes repeat words
+
+4e. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+    compares all the words from the list with the dictionary and separatest them into 3 columns
+    (1) unique to webpage (2) unique to dictionary file (3) in common between the 2
+
+4f. tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words # ENGLISHCHECKER
+    only shows the words from the webpage that are not english words
+
+5. buildwords
+
+#!/bin/bash
+
+grep "<td>.*</td>" |               # select only words and english translations
+sed "s/<[^<]*>//g" |               # delete html syntax
+tr -d [:blank:] |                  # delete blank spaces
+sed "/^\s*$/d" |                   # delete blank lines
+sed "/Kahakai/i\ooo" |             # insert random word above Kahakai because its translation was deleted
+sed -n '0~2!p' |                   # delete every other line (english translations)
+tr [:upper:] [:lower:] |           # all upper case to lower case
+sed "s/\`/\'/g" |                  # change grave to '
+sed "s/[^pk'mnwlhaeiou]//g" |      # delete non hawaiian characters
+sed "/^\s*$/d" |                   # delete any remaining blank lines
+sort -u                            # sort 
+
+6. chmod +x buildwords
+   added execute permissions
+
+7. ./buildwords < hwnwdshw.htm > hwords
+   make file for hwords
+
+8. tr -cs 'A-Za-z' '[\n*]' assign2.html | tr [:upper:] [:lower:] | sort -u | comm -23 - words > misEWords
+9.  wc -w misEWords
+    48 misEWords
+    There are 48 words on the webpage that are not english
+
+10. tr '[:upper:]' '[:lower:]' < assign2.html | tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords > misHWords
+11. wc pw misHWords
+    237 misHWords
+    There are 237 words with hawaiian letters on the page that aren't hawaiian words
+
+12. comm -12 misHwords words
+    words that are not Hawaiian but are English words
+
+    Ex. who, when
+
+13. comm -12 misEwords hwords
+    words that are not English but are Hawaiian words
+    
+    Ex. wiki
+ 
+
+
+
+
+
+
+
+
+
